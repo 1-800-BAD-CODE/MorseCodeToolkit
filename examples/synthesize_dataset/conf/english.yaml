@@ -1,0 +1,41 @@
+
+# These parameters are most likely to be configured
+output_dir: ???
+text_file: ???
+audio_manifest: ???
+alphabet: international
+labels: [
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+    "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+    "U", "V", "W", "X", "Y", "Z",
+    " ", ".", ",", "?"
+]
+
+dataset:
+  text_files:
+    - ${text_file}
+  background_audio_manifests:
+    - ${audio_manifest}
+  sample_rate: 16000
+  rng_seed: 111111
+  alphabet: ${alphabet}
+  labels: ${labels}
+  mix_background_percent: 1.0
+  max_words_per_eg: null
+  prosign_count: 1000
+  min_tone_frequency: 200
+  max_tone_frequency: 3000
+  min_tone_gain_db: -25
+  max_tone_gain_db: 0
+  min_dit_length_ms: 50
+  max_dit_length_ms: 130
+  duration_sigma_pct: 0.1
+  min_pad_ms: 0
+  max_pad_ms: 1500
+  min_snr_db: 10.0
+  max_snr_db: 30.0
+  augment_config:
+    white_noise:
+      prob: 0.9
+      min_level: -80
+      max_level: -40

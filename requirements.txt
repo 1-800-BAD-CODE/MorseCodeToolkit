@@ -1,0 +1,9 @@
+nemo_toolkit
+torch>=1.9
+setuptools>=58.2.0
+librosa>=0.8.1
+numpy>=1.20.3
+omegaconf>=2.1.1
+tqdm>=4.61.2
+soundfile>=0.10.3.post1
+torchaudio>=0.9.1

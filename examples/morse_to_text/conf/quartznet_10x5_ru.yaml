@@ -1,0 +1,268 @@
+name: &name "quartznet10x5_ru"
+
+train_text: ???
+train_background_manifest: ???
+dev_text: ???
+dev_background_manifest: ???
+
+model:
+  sample_rate: 16000
+  repeat: &repeat 5
+  dropout: &dropout 0.0
+  separable: &separable true
+  # Note: 'Ё' has no morse encoding, and is commonly mapped to Е in text. So there is no Ё in the model's vocab nor
+  # morse alphabet. The training/dev files should account for this (probably by mapping Ё -> Е before using them).
+  labels: [
+      "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й",
+      "К", "Л", "М", "Н", "О", "П", "Р", "С", "Т", "У",
+      "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э",
+      "Ю", "Я", " ", ".", "?", ","
+  ]
+
+  train_ds:
+    batch_size: 16
+    shuffle: true
+    num_workers: 4
+    dataset_params:
+      _target_: morsecodetoolkit.data.synthetic_dataset.SyntheticMorseDataset
+      sample_rate: ${model.sample_rate}
+      alphabet: "russian"
+      labels: ${model.labels}
+      text_files:
+        - ${train_text}
+      background_audio_manifests:
+        - ${train_background_manifest}
+      mix_background_percent: 0.75
+      max_words_per_eg: 8
+      prosign_count: 1000
+      min_tone_frequency: 200
+      max_tone_frequency: 3000
+      min_tone_gain_db: -25
+      max_tone_gain_db: 0
+      min_dit_length_ms: 50
+      max_dit_length_ms: 130
+      duration_sigma_pct: 0.1
+      min_pad_ms: 0
+      max_pad_ms: 1500
+      min_snr_db: 10.0
+      max_snr_db: 50.0
+      augment_config:
+        white_noise:
+          prob: 0.9
+          min_level: -80
+          max_level: -40
+
+  validation_ds:
+    batch_size: 32
+    shuffle: false
+    num_workers: 4
+    dataset_params:
+      _target_: morsecodetoolkit.data.synthetic_dataset.SyntheticMorseDataset
+      text_files:
+        - ${dev_text}
+      background_audio_manifests:
+        - ${dev_background_manifest}
+      sample_rate: ${model.sample_rate}
+      labels: ${model.labels}
+      # For most parameters, we use the same as the training data
+      mix_background_percent: ${model.train_ds.dataset_params.mix_background_percent}
+      alphabet: ${model.train_ds.dataset_params.alphabet}
+      max_words_per_eg: ${model.train_ds.dataset_params.max_words_per_eg}
+      min_tone_frequency: ${model.train_ds.dataset_params.min_tone_frequency}
+      max_tone_frequency: ${model.train_ds.dataset_params.max_tone_frequency}
+      min_tone_gain_db: ${model.train_ds.dataset_params.min_tone_gain_db}
+      max_tone_gain_db: ${model.train_ds.dataset_params.max_tone_gain_db}
+      min_dit_length_ms: ${model.train_ds.dataset_params.min_dit_length_ms}
+      max_dit_length_ms: ${model.train_ds.dataset_params.max_dit_length_ms}
+      duration_sigma_pct: ${model.train_ds.dataset_params.duration_sigma_pct}
+      min_pad_ms: ${model.train_ds.dataset_params.min_pad_ms}
+      max_pad_ms: ${model.train_ds.dataset_params.max_pad_ms}
+      min_snr_db: ${model.train_ds.dataset_params.min_snr_db}
+      max_snr_db: ${model.train_ds.dataset_params.max_snr_db}
+      augment_config: null
+
+  preprocessor:
+    _target_: nemo.collections.asr.modules.AudioToMelSpectrogramPreprocessor
+    normalize: "per_feature"
+    window_size: 0.025
+    sample_rate: ${model.sample_rate}
+    window_stride: 0.01
+    window: "hann"
+    features: &n_mels 64
+    n_fft: 512
+    frame_splicing: 1
+    dither: 0.00001
+
+  encoder:
+    _target_: nemo.collections.asr.modules.ConvASREncoder
+    feat_in: *n_mels
+    activation: relu
+    conv_mask: true
+
+    jasper:
+    - dilation: [1]
+      dropout: *dropout
+      filters: 64
+      kernel: [33]
+      repeat: 1
+      residual: false
+      separable: *separable
+      stride: [8]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: 64
+      kernel: [33]
+      repeat: *repeat
+      residual: true
+      separable: *separable
+      stride: [1]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: 64
+      kernel: [33]
+      repeat: *repeat
+      residual: true
+      separable: *separable
+      stride: [1]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: 64
+      kernel: [39]
+      repeat: *repeat
+      residual: true
+      separable: *separable
+      stride: [1]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: 64
+      kernel: [39]
+      repeat: *repeat
+      residual: true
+      separable: *separable
+      stride: [1]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: 128
+      kernel: [51]
+      repeat: *repeat
+      residual: true
+      separable: *separable
+      stride: [1]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: 128
+      kernel: [51]
+      repeat: *repeat
+      residual: true
+      separable: *separable
+      stride: [1]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: 128
+      kernel: [63]
+      repeat: *repeat
+      residual: true
+      separable: *separable
+      stride: [1]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: 128
+      kernel: [63]
+      repeat: *repeat
+      residual: true
+      separable: *separable
+      stride: [1]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: 128
+      kernel: [75]
+      repeat: *repeat
+      residual: true
+      separable: *separable
+      stride: [1]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: 128
+      kernel: [75]
+      repeat: *repeat
+      residual: true
+      separable: *separable
+      stride: [1]
+
+    - dilation: [2]
+      dropout: *dropout
+      filters: 128
+      kernel: [87]
+      repeat: 1
+      residual: false
+      separable: *separable
+      stride: [1]
+
+    - dilation: [1]
+      dropout: *dropout
+      filters: &enc_filters 256
+      kernel: [1]
+      repeat: 1
+      residual: false
+      stride: [1]
+
+  decoder:
+    _target_: nemo.collections.asr.modules.ConvASRDecoder
+    feat_in: *enc_filters
+    num_classes: 33
+    vocabulary: ${model.labels}
+
+  optim:
+    name: novograd
+    lr: .01
+    betas: [0.8, 0.5]
+    weight_decay: 0.0
+
+    sched:
+      name: CosineAnnealing
+      warmup_steps: 1000
+      min_lr: 0.0
+      last_epoch: -1
+
+trainer:
+  gpus: 1
+  max_epochs: 50
+  max_steps: null
+  num_nodes: 1
+  accelerator: ddp
+  amp_backend: native
+  accumulate_grad_batches: 8
+  checkpoint_callback: false
+  logger: false
+  log_every_n_steps: 25
+  val_check_interval: 4000  # Set to 0.25 to check 4 times per epoch, or an int for number of iterations
+
+exp_manager:
+  exp_dir: nemo_exp/ru/
+  name: *name
+  create_tensorboard_logger: True
+  create_checkpoint_callback: True
+  checkpoint_callback_params:
+    monitor: "val_wer"
+    mode: "min"
+  create_wandb_logger: False
+  wandb_logger_kwargs:
+    name: null
+    project: null
+
+hydra:
+  run:
+    dir: .
+  job_logging:
+    root:
+      handlers: null

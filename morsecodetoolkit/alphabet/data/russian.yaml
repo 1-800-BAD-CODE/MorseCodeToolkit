@@ -1,0 +1,121 @@
+
+# This mapping is based on https://en.wikipedia.org/wiki/Russian_Morse_code#Table_&_Melody
+# N.B. the lack of 'Ё'
+letters:
+  - key: "А"
+    code: ["DIT", "DASH"]
+  - key: "Б"
+    code: ["DASH", "DIT", "DIT", "DIT"]
+  - key: "В"
+    code: ["DIT", "DASH", "DASH"]
+  - key: "Г"
+    code: ["DASH", "DASH", "DIT"]
+  - key: "Д"
+    code: ["DASH", "DIT", "DIT"]
+  - key: "Е"
+    code: ["DIT"]
+  - key: "Ж"
+    code: ["DIT", "DIT", "DIT", "DASH"]
+  - key: "З"
+    code: ["DASH", "DASH", "DIT", "DIT"]
+  - key: "И"
+    code: ["DIT", "DIT"]
+  - key: "Й"
+    code: ["DIT", "DASH", "DASH", "DASH"]
+  - key: "К"
+    code: ["DASH", "DIT", "DASH"]
+  - key: "Л"
+    code: ["DIT", "DASH", "DIT", "DIT"]
+  - key: "М"
+    code: ["DASH", "DASH"]
+  - key: "Н"
+    code: ["DASH", "DIT"]
+  - key: "О"
+    code: ["DASH", "DASH", "DASH"]
+  - key: "П"
+    code: ["DIT", "DASH", "DASH", "DIT"]
+  - key: "Р"
+    code: ["DIT", "DASH", "DIT"]
+  - key: "С"
+    code: ["DIT", "DIT", "DIT"]
+  - key: "Т"
+    code: ["DASH"]
+  - key: "У"
+    code: ["DIT", "DIT", "DASH"]
+  - key: "Ф"
+    code: ["DIT", "DIT", "DASH", "DIT"]
+  - key: "Х"
+    code: ["DIT", "DIT", "DIT", "DIT"]
+  - key: "Ц"
+    code: ["DASH", "DIT", "DASH", "DIT"]
+  - key: "Ч"
+    code: ["DASH", "DASH", "DASH", "DIT"]
+  - key: "Ш"
+    code: ["DASH", "DASH", "DASH", "DASH"]
+  - key: "Щ"
+    code: ["DASH", "DASH", "DIT", "DASH"]
+  - key: "Ъ"
+    code: ["DASH", "DASH", "DIT", "DASH", "DASH"]
+  - key: "Ы"
+    code: ["DASH", "DIT", "DASH", "DASH"]
+  - key: "Ь"
+    code: ["DASH", "DIT", "DIT", "DASH"]
+  - key: "Э"
+    code: ["DIT", "DIT", "DASH", "DIT", "DIT"]
+  - key: "Ю"
+    code: ["DIT", "DIT", "DASH", "DASH"]
+  - key: "Я"
+    code: ["DIT", "DASH", "DIT", "DASH"]
+
+  - key: "0"
+    code: ["DASH", "DASH", "DASH", "DASH", "DASH"]
+  - key: "1"
+    code: ["DIT", "DASH", "DASH", "DASH", "DASH"]
+  - key: "2"
+    code: ["DIT", "DIT", "DASH", "DASH", "DASH"]
+  - key: "3"
+    code: ["DIT", "DIT", "DIT", "DASH", "DASH"]
+  - key: "4"
+    code: ["DIT", "DIT", "DIT", "DIT", "DASH"]
+  - key: "5"
+    code: ["DIT", "DIT", "DIT", "DIT", "DIT"]
+  - key: "6"
+    code: ["DASH", "DIT", "DIT", "DIT", "DIT"]
+  - key: "7"
+    code: ["DASH", "DASH", "DIT", "DIT", "DIT"]
+  - key: "8"
+    code: ["DASH", "DASH", "DASH", "DIT", "DIT"]
+  - key: "9"
+    code: ["DASH", "DASH", "DASH", "DASH", "DIT"]
+
+  - key: "."
+    code: ["DIT", "DIT", "DIT", "DIT", "DIT"]
+  - key: ","
+    code: ["DIT", "DASH", "DIT", "DASH", "DIT", "DASH"]
+  - key: ":"
+    code: ["DASH", "DASH", "DASH", "DIT", "DIT", "DIT"]
+  - key: ";"
+    code: ["DASH", "DIT", "DASH", "DIT", "DASH"]
+  - key: "("
+    code: ["DASH", "DIT", "DASH", "DASH", "DIT"]
+    # The table used to generate this only specifies '()'... added both here
+  - key: ")"
+    code: ["DASH", "DIT", "DASH", "DASH", "DIT", "DASH"]
+  - key: "'"
+    code: ["DIT", "DASH", "DASH", "DASH", "DASH", "DIT"]
+  - key: '"'
+    code: ["DIT", "DASH", "DIT", "DIT", "DASH", "DIT"]
+  - key: "/"
+    code: ["DASH", "DIT", "DIT", "DASH", "DIT"]
+  - key: "?"
+    code: ["DIT", "DIT", "DASH", "DASH", "DIT", "DIT"]
+  - key: "!"
+    code: ["DASH", "DASH", "DIT", "DIT", "DASH", "DASH"]
+  - key: "-"
+    code: ["DASH", "DIT", "DIT", "DIT", "DASH"]
+  - key: "@"
+    code: ["DIT", "DASH", "DASH", "DIT", "DASH", "DIT"]
+
+prosigns:
+  - key: "ОШИБКА"  # ERROR
+    code: ["DIT", "DIT", "DIT", "DIT", "DIT", "DIT", "DIT", "DIT"]

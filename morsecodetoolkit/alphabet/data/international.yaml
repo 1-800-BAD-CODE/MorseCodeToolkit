@@ -1,0 +1,131 @@
+
+# This mapping is based on
+# https://en.wikipedia.org/wiki/Morse_code#Letters,_numbers,_punctuation,_prosigns_for_Morse_code_and_non-Latin_variants
+
+letters:
+  - key: "A"
+    code: ["DIT", "DASH"]
+  - key: "B"
+    code: ["DASH", "DIT", "DIT", "DIT"]
+  - key: "C"
+    code: ["DASH", "DIT", "DASH", "DIT"]
+  - key: "D"
+    code: ["DASH", "DIT", "DIT"]
+  - key: "E"
+    code: ["DIT"]
+  - key: "F"
+    code: ["DIT", "DIT", "DASH", "DIT"]
+  - key: "G"
+    code: ["DASH", "DASH", "DIT"]
+  - key: "H"
+    code: ["DIT", "DIT", "DIT", "DIT"]
+  - key: "I"
+    code: ["DIT", "DIT"]
+  - key: "J"
+    code: ["DIT", "DASH", "DASH", "DASH"]
+  - key: "K"
+    code: ["DASH", "DIT", "DASH"]
+  - key: "L"
+    code: ["DIT", "DASH", "DIT", "DIT"]
+  - key: "M"
+    code: ["DASH", "DASH"]
+  - key: "N"
+    code: ["DASH", "DIT"]
+  - key: "O"
+    code: ["DASH", "DASH", "DASH"]
+  - key: "P"
+    code: ["DIT", "DASH", "DASH", "DIT"]
+  - key: "Q"
+    code: ["DASH", "DASH", "DIT", "DASH"]
+  - key: "R"
+    code: ["DIT", "DASH", "DIT"]
+  - key: "S"
+    code: ["DIT", "DIT", "DIT"]
+  - key: "T"
+    code: ["DASH"]
+  - key: "U"
+    code: ["DIT", "DIT", "DASH"]
+  - key: "V"
+    code: ["DIT", "DIT", "DIT", "DASH"]
+  - key: "W"
+    code: ["DIT", "DASH", "DASH"]
+  - key: "X"
+    code: ["DASH", "DIT", "DIT", "DASH"]
+  - key: "Y"
+    code: ["DASH", "DIT", "DASH", "DASH"]
+  - key: "Z"
+    code: ["DASH", "DASH", "DIT", "DIT"]
+
+  - key: "0"
+    code: ["DASH", "DASH", "DASH", "DASH", "DASH"]
+  - key: "1"
+    code: ["DIT", "DASH", "DASH", "DASH", "DASH"]
+  - key: "2"
+    code: ["DIT", "DIT", "DASH", "DASH", "DASH"]
+  - key: "3"
+    code: ["DIT", "DIT", "DIT", "DASH", "DASH"]
+  - key: "4"
+    code: ["DIT", "DIT", "DIT", "DIT", "DASH"]
+  - key: "5"
+    code: ["DIT", "DIT", "DIT", "DIT", "DIT"]
+  - key: "6"
+    code: ["DASH", "DIT", "DIT", "DIT", "DIT"]
+  - key: "7"
+    code: ["DASH", "DASH", "DIT", "DIT", "DIT"]
+  - key: "8"
+    code: ["DASH", "DASH", "DASH", "DIT", "DIT"]
+  - key: "9"
+    code: ["DASH", "DASH", "DASH", "DASH", "DIT"]
+
+  - key: "."
+    code: ["DIT", "DASH", "DIT", "DASH", "DIT"]
+  - key: ","
+    code: ["DASH", "DASH", "DIT", "DIT", "DASH", "DASH"]
+  - key: "?"
+    code: ["DIT", "DIT", "DASH", "DASH", "DIT", "DIT"]
+  - key: "'"
+    code: ["DIT", "DASH", "DASH", "DASH", "DASH", "DIT"]
+  - key: "!"
+    code: ["DASH", "DIT", "DASH", "DIT", "DASH", "DASH"]
+  - key: "/"
+    code: ["DASH", "DIT", "DIT", "DASH", "DIT"]
+  - key: "("
+    code: ["DASH", "DIT", "DASH", "DASH", "DIT"]
+  - key: ")"
+    code: ["DASH", "DIT", "DASH", "DASH", "DIT", "DASH"]
+  - key: "&"
+    code: ["DIT", "DASH", "DIT", "DIT", "DIT"]
+  - key: ":"
+    code: ["DASH", "DASH", "DASH", "DIT", "DIT", "DIT"]
+  - key: ";"
+    code: ["DASH", "DIT", "DASH", "DIT", "DASH", "DIT"]
+  - key: "="
+    code: ["DASH", "DIT", "DIT", "DIT", "DASH"]
+  - key: "+"
+    code: ["DIT", "DASH", "DIT", "DASH", "DIT"]
+  - key: "-"
+    code: ["DASH", "DIT", "DIT", "DIT", "DIT", "DASH"]
+  - key: "_"
+    code: ["DIT", "DIT", "DASH", "DASH", "DIT", "DASH"]
+  - key: '"'
+    code: ["DIT", "DASH", "DIT", "DIT", "DASH", "DIT"]
+  - key: "$"
+    code: ["DIT", "DIT", "DIT", "DASH", "DIT", "DIT", "DASH"]
+  - key: "@"
+    code: ["DIT", "DASH", "DASH", "DIT", "DASH", "DIT"]
+
+prosigns:
+  - key: "END OF WORK"
+    code: ["DIT", "DIT", "DIT", "DASH", "DIT", "DASH"]
+  - key: "ERROR"
+    code: ["DIT", "DIT", "DIT", "DIT", "DIT", "DIT", "DIT", "DIT"]
+  - key: "INVITATION TO TRANSMIT"
+    code: ["DASH", "DIT", "DASH"]
+  - key: "STARTING SIGNAL"
+    code: ["DASH", "DIT", "DASH", "DIT", "DASH"]
+  - key: "NEW PAGE SIGNAL"
+    code: ["DIT", "DASH", "DIT", "DASH", "DIT"]
+  - key: "UNDERSTOOD"
+    code: ["DIT", "DIT", "DIT", "DASH", "DIT"]
+  - key: "WAIT"
+    code: ["DIT", "DASH", "DIT", "DIT", "DIT"]
