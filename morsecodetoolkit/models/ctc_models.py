@@ -1,12 +1,15 @@
 
 import os
 from typing import Optional, Dict, Union
-from omegaconf import DictConfig
-from torch.utils.data import DataLoader
 
+from nemo.core import Dataset
+from nemo.utils import logging
 from nemo.collections.asr.models import EncDecCTCModel
 from nemo.collections.asr.data import audio_to_text_dataset
-from nemo.core import Dataset
+from omegaconf import DictConfig, open_dict, Container
+from pytorch_lightning.utilities import rank_zero_only
+import torch
+from torch.utils.data import DataLoader
 
 
 class MorseEncDecCTCModel(EncDecCTCModel):
@@ -74,3 +77,60 @@ class MorseEncDecCTCModel(EncDecCTCModel):
             batch_size=config['batch_size'],
             collate_fn=dataset.collate_fn
         )
+
+    @rank_zero_only
+    def maybe_init_from_pretrained_checkpoint(self, cfg: Container, map_location: str = 'cpu'):
+        """Overrides ``nemo.core.classes.ModelPT.maybe_init_from_pretrained_checkpoint``.
+
+         Differences from inherited implementation:
+             * Clean up a couple things (e.g., allow multiple keys as long as only one is non-null).
+             * Support changing vocabulary
+             * Do not accept the keyword ``init_from_pretrained_model`` since this project does not store models in the
+             cloud.
+
+         Args:
+             cfg: Configuration which may optionally specify one of ['init_from_nemo_model', 'init_from_ptl_ckpt'] whose
+             values are a filepath to either a ``.nemo`` model or ``.ckpt`` checkpoint, respectively.
+             map_location: Where to map the restored model.
+
+         Raises:
+             ValueError if more than one of the acceptable keys are non-null.
+
+        """
+        # Search config for model to load.
+        accepted_keys = ['init_from_nemo_model', 'init_from_ptl_ckpt']
+        matched_keys = [key for key in accepted_keys if cfg.get(key, None) is not None]
+        num_matches = len(matched_keys)
+
+        # No model to start from.
+        if num_matches == 0:
+            return
+
+        # More than one would be ambiguous.
+        if num_matches > 1:
+            raise ValueError(f"Expected at most one model to restore; got {[matched_keys]}")
+
+        # We have exactly one model from which to warm start. Restore it.
+        restored_model: MorseEncDecCTCModel
+        with open_dict(cfg):
+            if cfg.get('init_from_nemo_model', None) is not None:
+                # Restore model
+                model_path = cfg.pop('init_from_nemo_model')
+                restored_model = MorseEncDecCTCModel.restore_from(
+                    model_path, map_location=torch.device(map_location), strict=True
+                )
+            elif cfg.get('init_from_ptl_ckpt', None) is not None:
+                # Restore checkpoint
+                ckpt_path = cfg.pop('init_from_ptl_ckpt')
+                restored_model = MorseEncDecCTCModel.load_from_checkpoint(ckpt_path, map_location=map_location)
+            else:
+                raise ValueError("Check that all possible keys are accounted for when loading pretrained model!")
+
+        # Change the vocabulary of loaded model, if needed (method does nothing if vocab is same).
+        restored_model.change_vocabulary(self.decoder.vocabulary)
+
+        # Restore checkpoint into current model
+        self.load_state_dict(restored_model.state_dict(), strict=False)
+        del restored_model
+
+        logging.info(f"Model weights loaded from '{model_path}'")

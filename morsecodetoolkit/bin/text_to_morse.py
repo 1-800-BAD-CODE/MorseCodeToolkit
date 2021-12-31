@@ -45,7 +45,7 @@ def get_args() -> argparse.Namespace:
     data_opts.add_argument("--window-name", default="hann", help="Window function to apply to tones.")
     data_opts.add_argument("--window-rise-time-ms", type=int, default=12, help="Window rise time, in ms.")
     data_opts.add_argument(
-        "--dit-duration", type=int, default=50,
+        "--dit-duration", type=int, default=60,
         help="Mean duration of a dit, and the basic unit of length for all other durations."
     )
     data_opts.add_argument(

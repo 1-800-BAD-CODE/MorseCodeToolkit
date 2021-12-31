@@ -63,7 +63,7 @@ For training a morse recognition model, see
 Two pre-trained models are included in [./pretrained/](./pretrained/):
 
 1. English: 10x5 QuartzNet 
-2. Russian: 10x5 QuartzNet (not public yet)
+2. Russian: 10x5 QuartzNet
 
 Both of these models are end-to-end morse audio recognition models
 that accept as input audio signals and produce as output a matrix
@@ -78,7 +78,8 @@ end-to-end models.
 
 Training time for these models with a synthetic dataset is a 
 few hours on a single device for acceptable results (~1% WER 
-with the chosen data generation parameters).
+with the chosen data generation parameters). The Russian model was
+fine-tuned from the English model, which was trained from scratch.
 
 
 # Generating Morse Audio
@@ -255,3 +256,49 @@ includes English and Russian alphabets.
 
 For more information on alphabets and encodings, see 
 [./docs/alphabets_and_encodings.md](./docs/alphabets_and_encodings.md)
+
+E.g., we can repeat the above demonstration with Russian, which is the
+other language for which there is currently a pre-trained model and
+built-in alphabet:
+
+```text
+# Encode Russian 'Hello, world.' 
+$ mct-text-to-morse \
+    "Привет, мир." \
+    hello_world_ru.wav \
+    --alphabet-name russian
+```
+
+And let's inspect the spectrogram of this generated morse audio file:
+
+```text
+$ python scripts/extract_spectrogram.py \
+    hello_world_ru.wav \
+    images/morse_hello_ru.png
+```
+
+![image info](./images/morse_hello_ru.png)
+
+We can take a look at the definition of the 
+[Russian alphabet](./morsecodetoolkit/alphabet/data/russian.yaml)
+and verify the first two letters, `ПР`:
+
+```yaml
+letters:
+  # ...
+  - key: "П"
+    code: ["DIT", "DASH", "DASH", "DIT"]
+  - key: "Р"
+    code: ["DIT", "DASH", "DIT"]
+  # ...
+```
+
+And finally decode it with the pre-trained Russian model:
+
+```text
+$ mct-morse-to-text \
+    pretrained/russian/quartznet10x5.nemo \
+    hello_world_ru.wav
+  ...
+  INFO : Transcription: 'ПРИВЕТ, МИР.'
+```

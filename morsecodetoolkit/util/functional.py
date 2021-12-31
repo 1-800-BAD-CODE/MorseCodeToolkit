@@ -59,13 +59,13 @@ def symbols_to_signal(
                 pause_duration = int(rng.gauss(dit_duration_ms, duration_sigma))
                 start += pause_duration
             # Generate time stamps for this tone
-            scale = 1 if symbol == Symbol.DIT else 3
+            scale = 1 if symbol == Symbol.DIT else 3  # 1 for DIT, 3 for DASH
             tone_duration = int(rng.gauss(dit_duration_ms * scale, duration_sigma * scale))
             tone_segments.append((start, start + tone_duration))
             start += tone_duration
         elif symbol in {Symbol.CHAR_SPACE, Symbol.WORD_SPACE}:
             # Generate time stamps for a pause
-            scale = 3 if symbol == Symbol.CHAR_SPACE else 7
+            scale = 3 if symbol == Symbol.CHAR_SPACE else 7  # 3 for CHAR_SPACE, 7 for WORD_SPACE
             pause_duration = int(rng.gauss(dit_duration_ms * scale, duration_sigma * scale))
             start += pause_duration
         else:

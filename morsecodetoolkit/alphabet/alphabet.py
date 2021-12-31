@@ -31,7 +31,7 @@ class AlphabetData:
     prosigns: List[AlphabetEntry] = field(default_factory=list)
 
 
-# Maps test to symbol enums.
+# Maps dit and dash from words to symbol enums.
 _word_to_symbol: Dict[str, Symbol] = {
     "DIT": Symbol.DIT,
     "DASH": Symbol.DASH

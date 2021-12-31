@@ -1,16 +1,16 @@
 
 import json
-import torch
 import os
-import re
 import random
-import soundfile
-from tqdm import tqdm
+import re
 from typing import List, Dict, Optional, Tuple, Union
 
 from nemo.core import Dataset, typecheck
 from nemo.core.neural_types import NeuralType, AudioSignal, LengthsType, LabelsType
 from nemo.collections.asr.parts.preprocessing import AudioAugmentor, process_augmentations, AudioSegment
+import soundfile
+import torch
+from tqdm import tqdm
 
 from morsecodetoolkit.alphabet import MorseAlphabet, Symbol
 from morsecodetoolkit.util.functional import mix_background_signal, symbols_to_signal
@@ -50,20 +50,25 @@ class SyntheticMorseDataset(Dataset):
         prosigns, repeated as needed to reach 100.
         min_tone_frequency: Lower bound of frequency, in Hz, used for the tones.
         max_tone_frequency: Upper bound of tone, in Hz.
-        min_tone_gain_db: Lower bound of tone gain, in db.
-        max_tone_gain_db: Upper bound of tone gain, in db. Tones are generated with a maximum value of 1.0, so this
+        min_tone_gain_db: Lower bound of tone gain, in dB. Tones are generated with a maximum value of 1.0, so this
+        value should be negative to allow reduction of volume.
+        max_tone_gain_db: Upper bound of tone gain, in dB. Tones are generated with a maximum value of 1.0, so this
         should be no higher than 0.0.
-        min_dit_length_ms: Lower bound of dit length, in ms. ~50ms is common dit length.
+        min_dit_length_ms: Lower bound of dit length, in ms. ~80ms is common dit length.
         max_dit_length_ms: Upper bound of dir length, in ms.
         duration_sigma_pct: Standard deviation of tone/pause lengths, as a percentage of the tone/pause length
         actually used. E.g. if this is 0.1 and dit duration is 50ms, the actual dit duration will be N(50, 50*0.1).
+        mix_background_percent: If using background noise, choose to mix clean signals with given noise this percentage
+        of the time (1.0 == 100%). If mixing 100% of the time, the models may get confused when decoding simple pure
+        morse signals (e.g. the Wikipedia examples).
         rng_seed: Seed for the random number generator, which is used to decide dit durations, frequencies, etc.
         min_pad_ms: Lower bound of padding added to the beginning of each morse audio signal, in ms.
         max_pad_ms: Upper bound of padding added to the end of each morse audio signal, in ms.
         min_snr_db: Lower bound of SNR, with signal being the morse signal and noise being any added signals.
         max_snr_db: Upper bound of SNR.
         window_names: List of all possible window functions to use. These are applied to the edges of the tones to make
-        them smooth. If more than one, uniformly sample one per audio signal.
+        them smooth. If more than one, uniformly sample one per audio signal. This alters the features (typically
+        spectrograms) at the edges of the tones.
         min_rise_time_ms: Lower bound of the window function rise time (essentially half the window function).
         max_rise_time_ms: Upper bound of the window function rise time (essentially half the window function).
         augment_config: A list of dictionaries which can be interpreted by the function
@@ -82,8 +87,8 @@ class SyntheticMorseDataset(Dataset):
             max_tone_frequency: int = 3000,
             min_tone_gain_db: float = -20,
             max_tone_gain_db: float = 0,
-            min_dit_length_ms: int = 30,
-            max_dit_length_ms: int = 60,
+            min_dit_length_ms: int = 40,
+            max_dit_length_ms: int = 130,
             duration_sigma_pct: float = 0.1,
             mix_background_percent: float = 0.75,
             rng_seed: int = 12345,
@@ -322,7 +327,7 @@ class SyntheticMorseDataset(Dataset):
 
             {"audio_filepath": "/path/to/x.wav"}
 
-        Extra keys are OK, and are ignored. Same as NeMo's ASR manifests but only
+        Extra keys are OK, and are ignored. Same as NeMo's ASR manifests but only the ``audio_filepath`` key is needed.
 
         Args:
             manifests: List of file paths.
@@ -344,7 +349,7 @@ class SyntheticMorseDataset(Dataset):
         If this class was given a manifest of background noise audio, this method will randomly choose one of those
         background noise files and mix it with the clean morse signal.
 
-        Only one background noise file is used. If the background noise is longer than the input, it in truncated. If
+        Only one background noise file is used. If the background noise is longer than the input, it is truncated. If
         the noise signal is shorter than the morse signal, the noise signal is repeated to cover the morse signal
         entirely.
 
